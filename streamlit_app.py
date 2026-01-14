@@ -1,8 +1,12 @@
 import streamlit as st
+import os
 from openai import OpenAI
 from parse_hh import get_html, extract_vacancy_data, extract_resume_data
 
-client = OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
+# Попытка получить ключ из st.secrets (для локального запуска)
+# или из переменных окружения (для Render).
+api_key = st.secrets.get("OPENAI_API_KEY", os.environ.get("OPENAI_API_KEY"))
+client = OpenAI(api_key=api_key)
 
 SYSTEM_PROMPT = """
 Проскорь кандидата, насколько он подходит для данной вакансии.
