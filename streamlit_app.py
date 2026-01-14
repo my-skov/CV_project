@@ -3,9 +3,16 @@ import os
 from openai import OpenAI
 from parse_hh import get_html, extract_vacancy_data, extract_resume_data
 
-# Попытка получить ключ из st.secrets (для локального запуска)
-# или из переменных окружения (для Render).
-api_key = st.secrets.get("OPENAI_API_KEY", os.environ.get("OPENAI_API_KEY"))
+from dotenv import load_dotenv
+
+load_dotenv()
+
+# Получение ключа API из переменных окружения
+api_key = os.getenv("OPENAI_API_KEY")
+if not api_key:
+    st.error("Ключ OPENAI_API_KEY не найден. Убедитесь, что он задан в переменных окружения или в файле .env")
+    st.stop()
+
 client = OpenAI(api_key=api_key)
 
 SYSTEM_PROMPT = """
